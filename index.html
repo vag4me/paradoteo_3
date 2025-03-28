@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Το Παιχνίδι του Κωδικού</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #f2f2f2;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 500px;
+      width: 100%;
+      margin: auto;
+      padding: 20px;
+      background: #2b2b2b;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      text-align: center;
+      top: 20vh;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .message.success { color: limegreen; }
+    .message.error { color: tomato; }
+
+    .victory {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .victory img {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    @keyframes spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .spin-center {
+      animation: spin 5s linear infinite;
+    }
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: none;
+      z-index: 1;
+    }
+
+    #ionio-matrix-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      transition: transform 3s ease-in, opacity 2s ease-in;
+    }
+    #star-wars-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  background: black;
+  overflow: hidden;
+  perspective: 600px;
+  color: #ffe81f;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#star-wars {
+  position: relative;
+  height: 100%;
+  transform: rotateX(25deg);
+  transform-origin: bottom center;
+  overflow: hidden;
+}
+
+.crawl {
+  position: absolute;
+  bottom: -100%; /* 👈 ξεκινάει τελείως από κάτω */
+  width: 100%;
+  text-align: center;
+  animation: crawl 40s linear forwards;
+}
+
+.crawl .title {
+  font-size: 60px;
+  margin-bottom: 100px;
+}
+
+.crawl h1 {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 80px;
+  letter-spacing: 4px;
+  line-height: 1.4;
+}
+
+.crawl p {
+  font-size: 38px;
+  margin: 20px 0;
+  padding: 0 10%;
+  line-height: 2;
+}
+
+@keyframes crawl {
+  0% {
+    bottom: -100%;
+    opacity: 1;
+  }
+  100% {
+    bottom: 100%;
+    opacity: 0;
+  }
+}
+
+
+
+
+
+  </style>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+
+  <div class="container">
+    <h1>Το Παιχνίδι του Κωδικού</h1>
+    <input type="text" id="password" placeholder="Γράψε τον κωδικό σου και πάτα Enter..." />
+    <div class="message" id="message"></div>
+    <div class="victory" id="victory" style="display: none;">
+      <p>Μπράβο το Τμήμα ΙΤ είναι υπερήφανο για σένα.<br>Το πεπόνι σου σε περιμένει.<br><em>Δεν μας απογοήτευσες... αυτήν τη φορά.</em></p>
+      <img src="millchick.jpg" alt="melon reward">
+    </div>
+  </div>
+
+  <img id="giphy" src="giphy.gif" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 99999;">
+
+
+  <div id="star-wars-wrapper" style="display: none;">
+    <div id="star-wars">
+      <div class="crawl">
+        <div class="title">
+          <p>ΕΚΤΑΚΤΗ ΕΙΔΗΣΗ</p>
+          <h1>ΤΟ ΙΟΝΙΟ ΠΑΝΕΠΙΣΤΗΜΙΟ ΧΑΚΑΡΙΣΤΗΚΕ</h1>
+        </div>
+  
+        <p>Οι χάκερς απέκτησαν πρόσβαση μέσω του πιο «δυνατού» αδύναμου κωδικού στην ιστορία της 		κυβερνοασφάλειας. Συγχαρητήρια.</p>
+        <p>Το σύστημα κατέρρευσε μέσα σε λίγα δευτερόλεπτα. Οι servers δεν πρόλαβαν να αντιδράσουν.</p>
+        <p>Μάθημα για όλους: ποτέ μην χρησιμοποιείτε εύκολους κωδικούς.</p>
+        <p>Χρησιμοποιείτε σύνθετους, ενεργοποιήστε 2FA, και μην επαναλαμβάνετε passwords.</p>
+        <p>Η κυβερνοασφάλεια ξεκινάει από σένα.</p>
+        <p><em>Το Τμήμα IT</em></p>
+      </div>
+    </div>
+  </div>
+  
+  
+
+  <script>
+    const passwordInput = document.getElementById("password");
+    const messageBox = document.getElementById("message");
+    const victoryBox = document.getElementById("victory");
+
+    const rules = [
+      {
+    
+    test: (pw) => pw.length >= 12
+  },
+  {
+    
+    test: (pw) => /[A-ZΑ-Ω]/.test(pw)
+  },
+  {
+    
+    test: (pw) => /[a-zα-ω]/.test(pw)
+  },
+  {
+   
+    test: (pw) => /\d/.test(pw)
+  },
+  {
+    
+    test: (pw) => /[!@#$%^&*()_+{}\[\]:;"'<>?,./]/.test(pw)
+  },
+
+      
+    ];
+
+function validatePassword(pw) {
+  const failed = rules.filter(rule => !rule.test(pw));
+
+  if (failed.length === 0) {
+    // Επιτυχία
+    passwordInput.remove();
+    messageBox.style.display = "none";
+    victoryBox.style.display = "none";
+
+    // Εμφάνιση μηνύματος επιτυχίας
+    const successMsg = document.getElementById("success-message");
+    if (successMsg) {
+      successMsg.style.display = "block";
+    } else {
+      const msg = document.createElement("div");
+      msg.id = "success-message";
+      msg.style.textAlign = "center";
+      msg.style.marginBottom = "20px";
+      msg.innerHTML = `
+        <p style="font-size: 20px; font-weight: bold;">
+          Συγχαρητήρια. Η Ομάδα IT του Ιονίου Πανεπιστημίου είναι περήφανη για εσένα.
+        </p>
+        <p style="font-size: 18px;">
+          Η συμμόρφωσή σου με τα πρότυπα ασφαλείας καταγράφηκε.<br>
+          Σου φέραμε και μπάντα.<br>
+          <em>Μην το συνηθίσεις.</em>
+        </p>
+      `;
+      document.querySelector('.container').prepend(msg);
+    }
+
+    // Προβολή βίντεο (αν έχεις)
+    const video = document.createElement("video");
+    video.src = "clideo.mp4"; // path του βίντεο
+    video.autoplay = true;
+    video.controls = true;
+    video.style.width = "100%";
+    video.style.borderRadius = "12px";
+    video.style.boxShadow = "0 0 15px limegreen";
+    document.querySelector('.container').appendChild(video);
+
+  } else {
+    // Αποτυχία — υπολόγισε πόσους κανόνες δεν πληροί
+    const total = rules.length;
+    const failedCount = failed.length;
+
+    passwordInput.classList.remove("success");
+    passwordInput.classList.add("shake");
+    victoryBox.style.display = "none";
+    messageBox.className = "message error";
+    messageBox.innerHTML = `
+      ❌ Ο κωδικός παραβιάζει <strong>${failedCount}</strong> από <strong>${total}</strong> κανόνες ασφαλείας.<br><br>
+      <a href="politiki.pdf" target="_blank" style="color: #00ffff; text-decoration: underline;">
+        Δες την Πολιτική Ασφαλείας του Εργαστηρίου Πληροφορικής (Ομάδα 3)
+      </a>
+    `;
+
+    setTimeout(() => passwordInput.classList.remove("shake"), 400);
+  }
+
+  setTimeout(() => passwordInput.classList.remove("success"), 800);
+}
+
+
+
+
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const value = passwordInput.value.trim();
+
+const badPasswords = ["1234", "password", "123456789", "qwert", "12345", "1111"];
+if (badPasswords.includes(value)) {
+  messageBox.className = "message error";
+  messageBox.textContent = "🚨 Ενεργοποίηση πρωτοκόλλου MATRIX CHAOS...";
+  causeMatrixChaos();
+  return;
+}
+
+
+        validatePassword(value);
+      }
+    });
+
+    function causeMatrixChaos() {
+  // Remove input & container
+  passwordInput.remove();
+  document.querySelector('.container').style.display = "none";
+
+  // Matrix background
+  const canvas = document.getElementById("matrix-canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = "block";
+
+  const letters = "01";
+  const fontSize = 16;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.92) {
+        drops[i] = 0;
+      }
+
+      drops[i]++;
+    }
+  }
+
+  const matrixInterval = setInterval(drawMatrix, 30);
+
+  // Add giphy gif in place of logo
+  const gif = document.createElement("img");
+  gif.src = "giphy.gif";
+  gif.style.position = "fixed";
+  gif.style.top = "50%";
+  gif.style.left = "50%";
+  gif.style.transform = "translate(-50%, -50%)";
+  gif.style.width = "300px";
+  gif.style.zIndex = "9999";
+  document.body.appendChild(gif);
+
+  // Remove gif after 2 seconds, show scroll
+  setTimeout(() => {
+    gif.remove();
+    clearInterval(matrixInterval);
+    document.getElementById("star-wars-wrapper").style.display = "block";
+  }, 2000);
+}
+
+
+  </script>
+</body>
+</html>
