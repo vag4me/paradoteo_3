@@ -183,6 +183,18 @@
         <p>Χρησιμοποιείτε σύνθετους, ενεργοποιήστε 2FA, και μην επαναλαμβάνετε passwords.</p>
         <p>Η κυβερνοασφάλεια ξεκινάει από σένα.</p>
         <p><em>Το Τμήμα IT</em></p>
+<button onclick="restartGame()" style="
+  margin-top: 50px;
+  font-size: 20px;
+  padding: 10px 20px;
+  background: #111;
+  color: #ffe81f;
+  border: 2px solid #ffe81f;
+  border-radius: 8px;
+  cursor: pointer;
+">
+  🔁 Παίξε Ξανά
+</button>
       </div>
     </div>
   </div>
@@ -359,6 +371,9 @@ if (badPasswords.includes(value)) {
   }, 2000);
 }
 
+function restartGame() {
+  window.location.reload(); // απλό refresh
+}
 
   </script>
 </body>
