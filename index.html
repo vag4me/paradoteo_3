@@ -231,7 +231,7 @@
       
     ];
 
-function validatePassword(pw) {
+    function validatePassword(pw) {
   const failed = rules.filter(rule => !rule.test(pw));
 
   if (failed.length === 0) {
@@ -262,14 +262,14 @@ function validatePassword(pw) {
       document.querySelector('.container').prepend(msg);
     }
 
-    // Προβολή βίντεο (αν έχεις)
+    // Προβολή βίντεο
     const video = document.createElement("video");
-    video.src = "clideo.mp4"; // path του βίντεο
+    video.src = pw.length > 20 ? "verystrong.mp4" : "clideo.mp4"; // Δυνατό ή πολύ δυνατό
     video.autoplay = true;
     video.controls = true;
     video.style.width = "100%";
     video.style.borderRadius = "12px";
-    video.style.boxShadow = "0 0 15px limegreen";
+    video.style.boxShadow = pw.length > 15 ? "0 0 15px gold" : "0 0 15px limegreen";
     document.querySelector('.container').appendChild(video);
 
   } else {
@@ -293,6 +293,7 @@ function validatePassword(pw) {
 
   setTimeout(() => passwordInput.classList.remove("success"), 800);
 }
+
 
 
 
